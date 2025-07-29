@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import { store } from './store';
-import { useAppDispatch, useAppSelector } from './hooks/redux';
-import { listenToAuthChanges } from './store/slices/authSlice';
 
 // Components
 import LoadingSpinner from './components/common/LoadingSpinner';
-import ProtectedRoute from './components/common/ProtectedRoute';
 
 // Pages
 import AuthPage from './pages/Auth/AuthPage';
@@ -23,13 +20,28 @@ import ShopPage from './pages/Shop/ShopPage';
 import './index.css';
 
 const AppContent: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const { isAuthenticated, isLoading } = useAppSelector((state: any) => state.auth);
-  const { profile } = useAppSelector((state: any) => state.profile);
+  // For demo purposes, we'll start with authentication
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  useEffect(() => {
-    dispatch(listenToAuthChanges());
-  }, [dispatch]);
+  // Simulate authentication check
+  React.useEffect(() => {
+    const authStatus = localStorage.getItem('vulugo-demo-auth');
+    if (authStatus === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  // Listen for authentication changes
+  React.useEffect(() => {
+    const handleStorageChange = () => {
+      const authStatus = localStorage.getItem('vulugo-demo-auth');
+      setIsAuthenticated(authStatus === 'true');
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   if (isLoading) {
     return (
@@ -55,54 +67,42 @@ const AppContent: React.FC = () => {
           <Route 
             path="/" 
             element={
-              <ProtectedRoute>
-                {profile ? <SwipePage /> : <ProfileSetupPage />}
-              </ProtectedRoute>
+              isAuthenticated ? <SwipePage /> : <Navigate to="/auth" replace />
             } 
           />
           
           <Route 
             path="/profile" 
             element={
-              <ProtectedRoute>
-                <ProfileSetupPage />
-              </ProtectedRoute>
+              isAuthenticated ? <ProfileSetupPage /> : <Navigate to="/auth" replace />
             } 
           />
           
           <Route 
             path="/matches" 
             element={
-              <ProtectedRoute>
-                <MatchesPage />
-              </ProtectedRoute>
+              isAuthenticated ? <MatchesPage /> : <Navigate to="/auth" replace />
             } 
           />
           
           <Route 
             path="/chat/:matchId?" 
             element={
-              <ProtectedRoute>
-                <ChatPage />
-              </ProtectedRoute>
+              isAuthenticated ? <ChatPage /> : <Navigate to="/auth" replace />
             } 
           />
           
           <Route 
             path="/live" 
             element={
-              <ProtectedRoute>
-                <LivePage />
-              </ProtectedRoute>
+              isAuthenticated ? <LivePage /> : <Navigate to="/auth" replace />
             } 
           />
           
           <Route 
             path="/shop" 
             element={
-              <ProtectedRoute>
-                <ShopPage />
-              </ProtectedRoute>
+              isAuthenticated ? <ShopPage /> : <Navigate to="/auth" replace />
             } 
           />
 

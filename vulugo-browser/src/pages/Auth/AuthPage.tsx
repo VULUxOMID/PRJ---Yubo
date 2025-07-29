@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { signIn, signUp } from '../../store/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const AuthPage: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const { isLoading } = useAppSelector((state: any) => state.auth);
-  
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -16,31 +14,15 @@ const AuthPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    if (isLogin) {
-      try {
-        await dispatch(signIn({ email: formData.email, password: formData.password })).unwrap();
-        toast.success('Welcome back!');
-      } catch (error: any) {
-        toast.error(error.message || 'Login failed');
-      }
-    } else {
-      if (!formData.displayName.trim()) {
-        toast.error('Please enter your name');
-        return;
-      }
-      
-      try {
-        await dispatch(signUp({ 
-          email: formData.email, 
-          password: formData.password, 
-          displayName: formData.displayName 
-        })).unwrap();
-        toast.success('Account created successfully!');
-      } catch (error: any) {
-        toast.error(error.message || 'Sign up failed');
-      }
-    }
+    // Simulate loading
+    setTimeout(() => {
+      setIsLoading(false);
+      localStorage.setItem('vulugo-demo-auth', 'true');
+      toast.success(isLogin ? 'Welcome to VuluGO!' : 'Account created successfully!');
+      navigate('/');
+    }, 1500);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +30,16 @@ const AuthPage: React.FC = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleDemoLogin = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      localStorage.setItem('vulugo-demo-auth', 'true');
+      toast.success('Welcome to VuluGO Demo!');
+      navigate('/');
+    }, 1000);
   };
 
   return (
@@ -138,6 +130,25 @@ const AuthPage: React.FC = () => {
             </button>
           </form>
 
+          {/* Demo Login Button */}
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              disabled={isLoading}
+              className="btn-secondary w-full"
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Loading Demo...
+                </div>
+              ) : (
+                'Try Demo (No Account Needed)'
+              )}
+            </button>
+          </div>
+
           {/* Toggle Login/Signup */}
           <div className="text-center mt-6">
             <p className="text-gray-600">
@@ -167,6 +178,7 @@ const AuthPage: React.FC = () => {
               <button
                 type="button"
                 className="btn-outline flex items-center justify-center"
+                onClick={() => toast.success('Google login coming soon!')}
               >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -179,6 +191,7 @@ const AuthPage: React.FC = () => {
               <button
                 type="button"
                 className="btn-outline flex items-center justify-center"
+                onClick={() => toast.success('Facebook login coming soon!')}
               >
                 <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -186,6 +199,16 @@ const AuthPage: React.FC = () => {
                 Facebook
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Demo Info */}
+        <div className="text-center mt-6">
+          <div className="card p-4 bg-white/10 backdrop-blur-sm">
+            <h3 className="text-white font-semibold mb-2">🎉 Demo Mode</h3>
+            <p className="text-white/80 text-sm">
+              This is a demo version of VuluGO. Click "Try Demo" to explore all features with mock data!
+            </p>
           </div>
         </div>
 
