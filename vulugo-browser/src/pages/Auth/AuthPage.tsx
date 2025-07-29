@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-const AuthPage: React.FC = () => {
-  const navigate = useNavigate();
+interface AuthPageProps {
+  onLogin: () => void;
+}
+
+const AuthPage: React.FC<AuthPageProps> = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,9 +21,8 @@ const AuthPage: React.FC = () => {
     // Simulate loading
     setTimeout(() => {
       setIsLoading(false);
-      localStorage.setItem('vulugo-demo-auth', 'true');
       toast.success(isLogin ? 'Welcome to VuluGO!' : 'Account created successfully!');
-      navigate('/');
+      onLogin();
     }, 1500);
   };
 
@@ -36,9 +37,8 @@ const AuthPage: React.FC = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      localStorage.setItem('vulugo-demo-auth', 'true');
       toast.success('Welcome to VuluGO Demo!');
-      navigate('/');
+      onLogin();
     }, 1000);
   };
 

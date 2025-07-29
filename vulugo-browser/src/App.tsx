@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import { store } from './store';
@@ -19,124 +18,136 @@ import ShopPage from './pages/Shop/ShopPage';
 // Styles
 import './index.css';
 
+type Page = 'auth' | 'swipe' | 'profile' | 'matches' | 'chat' | 'live' | 'shop';
+
 const AppContent: React.FC = () => {
-  // For demo purposes, we'll start with authentication
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [currentPage, setCurrentPage] = useState<Page>('auth');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Simulate authentication check
   React.useEffect(() => {
     const authStatus = localStorage.getItem('vulugo-demo-auth');
     if (authStatus === 'true') {
       setIsAuthenticated(true);
+      setCurrentPage('swipe');
     }
   }, []);
 
-  // Listen for authentication changes
-  React.useEffect(() => {
-    const handleStorageChange = () => {
-      const authStatus = localStorage.getItem('vulugo-demo-auth');
-      setIsAuthenticated(authStatus === 'true');
-    };
+  const handleLogin = () => {
+    localStorage.setItem('vulugo-demo-auth', 'true');
+    setIsAuthenticated(true);
+    setCurrentPage('swipe');
+  };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+  const handleLogout = () => {
+    localStorage.removeItem('vulugo-demo-auth');
+    setIsAuthenticated(false);
+    setCurrentPage('auth');
+  };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center">
-        <LoadingSpinner size="large" />
-      </div>
-    );
+  const navigateTo = (page: Page) => {
+    setCurrentPage(page);
+  };
+
+  if (!isAuthenticated) {
+    return <AuthPage onLogin={handleLogin} />;
   }
 
   return (
-    <Router>
-      <div className="App min-h-screen bg-gray-50">
-        <Routes>
-          {/* Public Routes */}
-          <Route 
-            path="/auth" 
-            element={
-              isAuthenticated ? <Navigate to="/" replace /> : <AuthPage />
-            } 
-          />
-
-          {/* Protected Routes */}
-          <Route 
-            path="/" 
-            element={
-              isAuthenticated ? <SwipePage /> : <Navigate to="/auth" replace />
-            } 
-          />
-          
-          <Route 
-            path="/profile" 
-            element={
-              isAuthenticated ? <ProfileSetupPage /> : <Navigate to="/auth" replace />
-            } 
-          />
-          
-          <Route 
-            path="/matches" 
-            element={
-              isAuthenticated ? <MatchesPage /> : <Navigate to="/auth" replace />
-            } 
-          />
-          
-          <Route 
-            path="/chat/:matchId?" 
-            element={
-              isAuthenticated ? <ChatPage /> : <Navigate to="/auth" replace />
-            } 
-          />
-          
-          <Route 
-            path="/live" 
-            element={
-              isAuthenticated ? <LivePage /> : <Navigate to="/auth" replace />
-            } 
-          />
-          
-          <Route 
-            path="/shop" 
-            element={
-              isAuthenticated ? <ShopPage /> : <Navigate to="/auth" replace />
-            } 
-          />
-
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-
-        {/* Toast Notifications */}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#363636',
-              color: '#fff',
-            },
-            success: {
-              duration: 3000,
-              iconTheme: {
-                primary: '#4ECDC4',
-                secondary: '#fff',
-              },
-            },
-            error: {
-              duration: 5000,
-              iconTheme: {
-                primary: '#FF6B6B',
-                secondary: '#fff',
-              },
-            },
-          }}
-        />
+    <div className="App min-h-screen bg-gray-50">
+      {/* Navigation Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <h1 className="text-xl font-bold text-gray-800">VuluGO</h1>
+          </div>
+          <div className="flex items-center space-x-4">
+            <button 
+              onClick={() => navigateTo('swipe')}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                currentPage === 'swipe' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              Swipe
+            </button>
+            <button 
+              onClick={() => navigateTo('matches')}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                currentPage === 'matches' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              Matches
+            </button>
+            <button 
+              onClick={() => navigateTo('profile')}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                currentPage === 'profile' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              Profile
+            </button>
+            <button 
+              onClick={() => navigateTo('live')}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                currentPage === 'live' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              Live
+            </button>
+            <button 
+              onClick={() => navigateTo('shop')}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                currentPage === 'shop' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              Shop
+            </button>
+            <button 
+              onClick={handleLogout}
+              className="text-gray-600 hover:text-gray-800 text-sm"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
-    </Router>
+
+      {/* Page Content */}
+      <div className="flex-1">
+        {currentPage === 'swipe' && <div><SwipePage /></div>}
+        {currentPage === 'matches' && <div><MatchesPage /></div>}
+        {currentPage === 'profile' && <div><ProfileSetupPage /></div>}
+        {currentPage === 'chat' && <div><ChatPage /></div>}
+        {currentPage === 'live' && <div><LivePage /></div>}
+        {currentPage === 'shop' && <div><ShopPage /></div>}
+      </div>
+
+      {/* Toast Notifications */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#4ECDC4',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 5000,
+            iconTheme: {
+              primary: '#FF6B6B',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+    </div>
   );
 };
 
