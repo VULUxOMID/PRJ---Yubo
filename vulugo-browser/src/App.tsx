@@ -24,8 +24,8 @@ import './index.css';
 
 const AppContent: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isAuthenticated, isLoading, user } = useAppSelector((state) => state.auth);
-  const { profile } = useAppSelector((state) => state.profile);
+  const { isAuthenticated, isLoading } = useAppSelector((state: any) => state.auth);
+  const { profile } = useAppSelector((state: any) => state.profile);
 
   useEffect(() => {
     dispatch(listenToAuthChanges());

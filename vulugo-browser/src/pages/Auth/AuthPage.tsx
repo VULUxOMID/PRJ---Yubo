@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 const AuthPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector((state: any) => state.auth);
+  const { isLoading } = useAppSelector((state: any) => state.auth);
   
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -193,9 +193,9 @@ const AuthPage: React.FC = () => {
         <div className="text-center mt-6">
           <p className="text-white/60 text-sm">
             By continuing, you agree to our{' '}
-            <a href="#" className="underline hover:text-white">Terms of Service</a>
+            <button type="button" className="underline hover:text-white">Terms of Service</button>
             {' '}and{' '}
-            <a href="#" className="underline hover:text-white">Privacy Policy</a>
+            <button type="button" className="underline hover:text-white">Privacy Policy</button>
           </p>
         </div>
       </div>

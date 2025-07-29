@@ -3,95 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>VuluGO - Redirecting...</title>
     <style>
-        * {
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
         }
-
         .container {
             text-align: center;
             padding: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 500px;
-            width: 90%;
         }
-
         h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out;
+            font-weight: 700;
         }
-
         p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
             opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.3s both;
         }
-
-        .button {
+        .btn {
             display: inline-block;
-            padding: 12px 24px;
             background: rgba(255, 255, 255, 0.2);
             color: white;
+            padding: 12px 24px;
             text-decoration: none;
             border-radius: 25px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease;
-            animation: fadeInUp 1s ease-out 0.6s both;
+            font-weight: 500;
         }
-
-        .button:hover {
+        .btn:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
         }
-
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            p {
-                font-size: 1rem;
-            }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Hello World!</h1>
-        <p>Welcome to your first web page. This is a beautiful, modern "Hello World" page with smooth animations and responsive design.</p>
-        <a href="#" class="button">Get Started</a>
+        <h1>VuluGO</h1>
+        <p>Your social discovery app is starting up...</p>
+        <div style="margin-bottom: 2rem;">
+            <span class="spinner"></span>
+            <span>Loading VuluGO Browser App...</span>
+        </div>
+        <a href="http://localhost:3000" class="btn">
+            Open VuluGO App
+        </a>
+        <p style="font-size: 0.9rem; margin-top: 2rem; opacity: 0.7;">
+            If the app doesn't open automatically, click the button above
+        </p>
     </div>
+    
+    <script>
+        // Auto-redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = 'http://localhost:3000';
+        }, 3000);
+    </script>
 </body>
 </html> 
