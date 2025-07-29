@@ -3,9 +3,6 @@ import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import { store } from './store';
 
-// Components
-import LoadingSpinner from './components/common/LoadingSpinner';
-
 // Pages
 import AuthPage from './pages/Auth/AuthPage';
 import ProfileSetupPage from './pages/Profile/ProfileSetupPage';
@@ -54,9 +51,9 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="App min-h-screen bg-gray-50">
+    <div className="App min-h-screen bg-gray-50 flex flex-col">
       {/* Navigation Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+      <div className="bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold text-gray-800">VuluGO</h1>
@@ -64,47 +61,47 @@ const AppContent: React.FC = () => {
           <div className="flex items-center space-x-4">
             <button 
               onClick={() => navigateTo('swipe')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                currentPage === 'swipe' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                currentPage === 'swipe' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
             >
               Swipe
             </button>
             <button 
               onClick={() => navigateTo('matches')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                currentPage === 'matches' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                currentPage === 'matches' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
             >
               Matches
             </button>
             <button 
               onClick={() => navigateTo('profile')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                currentPage === 'profile' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                currentPage === 'profile' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
             >
               Profile
             </button>
             <button 
               onClick={() => navigateTo('live')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                currentPage === 'live' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                currentPage === 'live' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
             >
               Live
             </button>
             <button 
               onClick={() => navigateTo('shop')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                currentPage === 'shop' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800'
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                currentPage === 'shop' ? 'bg-primary-500 text-white' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
             >
               Shop
             </button>
             <button 
               onClick={handleLogout}
-              className="text-gray-600 hover:text-gray-800 text-sm"
+              className="text-gray-600 hover:text-gray-800 text-sm px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
               Logout
             </button>
@@ -113,13 +110,13 @@ const AppContent: React.FC = () => {
       </div>
 
       {/* Page Content */}
-      <div className="flex-1">
-        {currentPage === 'swipe' && <div><SwipePage /></div>}
-        {currentPage === 'matches' && <div><MatchesPage /></div>}
-        {currentPage === 'profile' && <div><ProfileSetupPage /></div>}
-        {currentPage === 'chat' && <div><ChatPage /></div>}
-        {currentPage === 'live' && <div><LivePage /></div>}
-        {currentPage === 'shop' && <div><ShopPage /></div>}
+      <div className="flex-1 overflow-hidden">
+        {currentPage === 'swipe' && <SwipePage />}
+        {currentPage === 'matches' && <MatchesPage />}
+        {currentPage === 'profile' && <ProfileSetupPage />}
+        {currentPage === 'chat' && <ChatPage />}
+        {currentPage === 'live' && <LivePage />}
+        {currentPage === 'shop' && <ShopPage />}
       </div>
 
       {/* Toast Notifications */}
